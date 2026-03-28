@@ -1,0 +1,23 @@
+name: Build Executables
+on: [push]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install -r requirements.txt pyinstaller
+      - name: Build executable
+        run: python -m PyInstaller forecast_app.py --onefile --noconsole --collect-all prophet --collect-all pmdarima --collect-all plotly --collect-all statsmodels --collect-all cmdstanpy --hidden-import pmdarima --hidden-import prophet
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: forecast-app-${{ matrix.os }}
+          path: dist/
