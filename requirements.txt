@@ -1,0 +1,7 @@
+pandas
+matplotlib
+statsmodels
+numpy
+prophet
+pmdarima
+plotly
